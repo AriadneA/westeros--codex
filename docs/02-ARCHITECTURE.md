@@ -60,13 +60,13 @@ com.example/
 ├── data/                              # Implementações de infraestrutura e SSOT
 │   ├── remote/
 │   │   ├── api/
-│   │   │   ├── IceAndFireApiService.kt
-│   │   │   └── ThronesApiService.kt
+│   │   │   ├── IceAndFireApi.kt
+│   │   │   └── ThronesApi.kt
 │   │   └── dto/
 │   │       ├── HouseDto.kt
 │   │       └── ThronesCharacterDto.kt
 │   ├── local/
-│   │   ├── WesterosDatabase.kt
+│   │   ├── AppDatabase.kt
 │   │   ├── dao/
 │   │   │   ├── HouseDao.kt
 │   │   │   ├── CharacterDao.kt
@@ -135,8 +135,8 @@ Responsável por encapsular as regras de negócio do domínio de Westeros e os c
 Responsável pela comunicação HTTP, serialização JSON via Moshi, persistência local no SQLite via Room e orquestração Offline-First.
 
 - **Redes (`remote`):**
-  - `IceAndFireApiService`: Configurado com Retrofit para `https://anapioficeandfire.com/api/`, expondo `@GET("houses") suspend fun getHouses(@Query("page") page: Int, @Query("pageSize") pageSize: Int): List<HouseDto>`.
-  - `ThronesApiService`: Configurado com Retrofit separado (ou `@Url`/instância nomeada Hilt `@Named("ThronesRetrofit")`) para `https://thronesapi.com/api/v2/`, expondo `@GET("Characters") suspend fun getCharacters(): List<ThronesCharacterDto>`.
+  - `IceAndFireApi`: Configurado com Retrofit para `https://anapioficeandfire.com/api/`, expondo `@GET("houses") suspend fun getHouses(@Query("page") page: Int, @Query("pageSize") pageSize: Int): List<HouseDto>`.
+  - `ThronesApi`: Configurado com Retrofit separado (instância nomeada Hilt `@Named("ThronesRetrofit")`) para `https://thronesapi.com/api/v2/`, expondo `@GET("Characters") suspend fun getCharacters(): List<ThronesCharacterDto>`.
   - Interceptores OkHttp com timeouts explícitos e `HttpLoggingInterceptor` apenas em `BuildConfig.DEBUG`.
 - **Persistência (`local`):**
   - O Room utiliza **KSP** (jamais KAPT).
@@ -327,8 +327,8 @@ data class HouseDto(
 
 | Módulo Hilt | Escopo | Componentes Providos |
 | :--- | :--- | :--- |
-| `NetworkModule` | `SingletonComponent` | `OkHttpClient`, `Moshi`, instâncias `Retrofit` (`@Named("IceAndFire")` e `@Named("Thrones")`), `IceAndFireApiService`, `ThronesApiService`. |
-| `DatabaseModule` | `SingletonComponent` | `WesterosDatabase` (Room), `HouseDao`, `CharacterDao`, `MaesterNoteDao`, `SyncMetadataDao`. |
+| `NetworkModule` | `SingletonComponent` | `OkHttpClient`, `Moshi`, instâncias `Retrofit` (`@Named("IceAndFire")` e `@Named("Thrones")`), `IceAndFireApi`, `ThronesApi`. |
+| `DatabaseModule` | `SingletonComponent` | `AppDatabase` (Room), `HouseDao`, `CharacterDao`, `MaesterNoteDao`, `SyncMetadataDao`. |
 | `DispatcherModule` | `SingletonComponent` | Qualifiers `@IoDispatcher` e `@DefaultDispatcher` (`CoroutineDispatcher`) para facilitar substituição em testes unitários. |
 | `RepositoryModule` | `SingletonComponent` | `@Binds` ligando `HouseRepositoryImpl` à interface `HouseRepository`. |
 
