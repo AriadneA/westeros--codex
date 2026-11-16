@@ -44,7 +44,7 @@ com.example/
 │   ├── model/
 │   │   ├── House.kt
 │   │   ├── HouseDetail.kt
-│   │   ├── CharacterPortrait.kt
+│   │   ├── Character.kt
 │   │   ├── MaesterNote.kt
 │   │   └── SyncResult.kt
 │   ├── repository/
@@ -69,16 +69,18 @@ com.example/
 │   │   ├── WesterosDatabase.kt
 │   │   ├── dao/
 │   │   │   ├── HouseDao.kt
-│   │   │   ├── CharacterPortraitDao.kt
+│   │   │   ├── CharacterDao.kt
 │   │   │   ├── MaesterNoteDao.kt
 │   │   │   └── SyncMetadataDao.kt
+│   │   ├── converter/
+│   │   │   └── WesterosTypeConverters.kt
 │   │   └── entity/
 │   │       ├── HouseEntity.kt
 │   │       ├── HouseUserStateEntity.kt
-│   │       ├── CharacterPortraitEntity.kt
+│   │       ├── CharacterEntity.kt
 │   │       ├── MaesterNoteEntity.kt
 │   │       ├── SyncMetadataEntity.kt
-│   │       └── HouseWithUserStateRelation.kt
+│   │       └── HouseWithUserState.kt
 │   ├── mapper/
 │   │   ├── HouseMappers.kt
 │   │   ├── CharacterMappers.kt
@@ -113,8 +115,8 @@ Responsável por encapsular as regras de negócio do domínio de Westeros e os c
 
 - **Modelos de Domínio (`domain.model`):**
   - `House`: `id`, `name`, `region`, `coatOfArms`, `words`, `seats`, `titles`, `ancestralWeapons`, `isSworn` (lealdade), `notesCount`.
-  - `HouseDetail`: Estende informações completas com `founded`, `diedOut`, `characters: List<CharacterPortrait>` e `notes: List<MaesterNote>`.
-  - `CharacterPortrait`: `id`, `fullName`, `title`, `family`, `imageUrl`.
+  - `HouseDetail`: Estende informações completas com `founded`, `diedOut`, `overlordId`, `characters: List<Character>` e `notes: List<MaesterNote>`.
+  - `Character`: `id`, `firstName`, `lastName`, `fullName`, `title`, `family`, `imageUrl`.
   - `MaesterNote`: `id`, `houseId`, `content`, `updatedAtMillis`.
 - **Contrato de Repositório (`HouseRepository`):**
   - `observeHouses(query: String, region: String?, onlySworn: Boolean): Flow<List<House>>`
@@ -270,7 +272,7 @@ Um dos maiores riscos em aplicativos Offline-First é sobrescrever dados criados
 
 Como a *An API of Ice and Fire* e a *ThronesAPI* não compartilham IDs numéricos idênticos, a vinculação no SSOT utiliza uma chave normalizada `normalizedFamilyKey`:
 - Exemplo na `HouseEntity`: `"House Stark of Winterfell"` → remove prefixo `"House "` e sufixo `" of ..."` → `"stark"`.
-- Exemplo na `CharacterPortraitEntity`: `"House Stark"` ou `"Stark"` → remove `"House "` e normaliza espaços/caixa → `"stark"`.
+- Exemplo na `CharacterEntity`: `"House Stark"` ou `"Stark"` → remove `"House "` e normaliza espaços/caixa → `"stark"`.
 - A consulta Room ou o mapper relacional associa os retratos cujo `normalizedFamilyKey` coincide com o da casa (com regras de normalização para casos compostos como `"House Targaryen"` / `"Targaryen"`, `"House Lannister"` / `"Lannister"`, `"Greyjoy"`, `"Baratheon"`, `"Tyrell"`, `"Martell"`, `"Bolton"`, `"Tully"`).
 
 ---
@@ -307,7 +309,7 @@ data class HouseDto(
 #### 2. `DTO -> Entity` (Sanitização e Extração de Chave)
 - Extrai `id` a partir do último segmento da `url` (ex.: `"https://anapioficeandfire.com/api/houses/362"` → `"362"`).
 - Filtra listas contendo apenas strings em branco (`titles.filter { it.isNotBlank() }`), pois a API frequentemente retorna `[""]`.
-- Calcula `normalizedFamilyKey` (ex.: `"stark"`) para correlação rápida com `CharacterPortraitEntity`.
+- Calcula `normalizedFamilyKey` (ex.: `"stark"`) para correlação rápida com `CharacterEntity`.
 - Normaliza `region` vazia para `"Unknown Region"` ou mantém vazio para exibição tratada na UI.
 
 #### 3. `Entity + Relation -> Domain`
@@ -326,7 +328,7 @@ data class HouseDto(
 | Módulo Hilt | Escopo | Componentes Providos |
 | :--- | :--- | :--- |
 | `NetworkModule` | `SingletonComponent` | `OkHttpClient`, `Moshi`, instâncias `Retrofit` (`@Named("IceAndFire")` e `@Named("Thrones")`), `IceAndFireApiService`, `ThronesApiService`. |
-| `DatabaseModule` | `SingletonComponent` | `WesterosDatabase` (Room), `HouseDao`, `CharacterPortraitDao`, `MaesterNoteDao`, `SyncMetadataDao`. |
+| `DatabaseModule` | `SingletonComponent` | `WesterosDatabase` (Room), `HouseDao`, `CharacterDao`, `MaesterNoteDao`, `SyncMetadataDao`. |
 | `DispatcherModule` | `SingletonComponent` | Qualifiers `@IoDispatcher` e `@DefaultDispatcher` (`CoroutineDispatcher`) para facilitar substituição em testes unitários. |
 | `RepositoryModule` | `SingletonComponent` | `@Binds` ligando `HouseRepositoryImpl` à interface `HouseRepository`. |
 
