@@ -50,10 +50,11 @@ com.example/
 │   ├── repository/
 │   │   └── HouseRepository.kt
 │   └── usecase/
-│       ├── ObserveHousesUseCase.kt
-│       ├── ObserveHouseDetailUseCase.kt
+│       ├── GetHousesUseCase.kt
+│       ├── GetHouseDetailUseCase.kt
+│       ├── GetAvailableRegionsUseCase.kt
 │       ├── SyncHousesPageUseCase.kt
-│       ├── SyncCharactersUseCase.kt
+│       ├── SyncInitialDataUseCase.kt
 │       ├── ToggleAllegianceUseCase.kt
 │       ├── SaveMaesterNoteUseCase.kt
 │       └── DeleteMaesterNoteUseCase.kt
@@ -340,7 +341,7 @@ Todos os testes unitários residem em `src/test/` (JVM local, sem dependência d
 
 1. **Testes de Mappers (`HouseMappersTest`, `CharacterMappersTest`):**
    - Garantem extração correta do `id` da URL, limpeza de `[""]`, cálculo de `normalizedFamilyKey` e preservação de campos opcionais.
-2. **Testes de UseCases (`SaveMaesterNoteUseCaseTest`, `ToggleAllegianceUseCaseTest`, `ObserveHousesUseCaseTest`):**
+2. **Testes de UseCases (`GetHousesUseCaseTest`, `ToggleAllegianceUseCaseTest`, `SaveMaesterNoteUseCaseTest`, `SyncHousesPageUseCaseTest`):**
    - Validam regras puras de negócio (ex.: rejeição de nota em branco, delegação correta para o `HouseRepository` mockado com MockK).
 3. **Testes de Repositório (`HouseRepositoryImplTest`):**
    - Verificam o comportamento Offline-First: quando o Retrofit lança `IOException`, o método de sincronização retorna `Result.failure` sem quebrar, e os dados existentes no DAO continuam sendo emitidos.
