@@ -1,3 +1,37 @@
 <resources>
     <string name="app_name">Westeros Codex</string>
+    <string name="codex_header_subtitle">Arquivos da Cidadela</string>
+    <string name="codex_banner_description">Salão dos arquivos da Cidadela de Westeros</string>
+    <string name="nav_explore">Explorar</string>
+    <string name="nav_sworn">Casas Juradas</string>
+    <string name="search_placeholder">Buscar casa ou lema...</string>
+    <string name="search_clear_description">Limpar busca</string>
+    <string name="filter_all_regions">Todas</string>
+    <string name="region_unknown">Região desconhecida</string>
+    <string name="words_missing">Sem lema registrado</string>
+    <string name="coat_of_arms_missing">Descrição heráldica não registrada nos arquivos.</string>
+    <string name="pledge_loyalty_description">Jurar lealdade à casa</string>
+    <string name="revoke_loyalty_description">Revogar lealdade à casa</string>
+    <string name="sworn_badge_label">Jurada</string>
+    <string name="notes_badge_format">%d notas</string>
+    <string name="notes_badge_singular">1 nota</string>
+    <string name="loading_archives">Consultando os arquivos da Cidadela…</string>
+    <string name="loading_more_houses">Carregando mais casas…</string>
+    <string name="error_title">Corvos sem resposta</string>
+    <string name="retry_button">Tentar novamente</string>
+    <string name="empty_search_title">Nenhuma casa encontrada</string>
+    <string name="empty_search_message">Não há registros correspondentes aos filtros atuais nos arquivos locais.</string>
+    <string name="empty_sworn_title">Nenhum juramento prestado</string>
+    <string name="empty_sworn_message">Toque no escudo de qualquer Casa para jurar lealdade e mantê-la em destaque offline.</string>
+    <string name="empty_catalog_title">Arquivos vazios</string>
+    <string name="empty_catalog_message">Nenhuma Casa disponível no momento. Tente atualizar os registros.</string>
+    <string name="clear_filters_button">Limpar filtros</string>
+    <string name="explore_houses_button">Explorar Casas</string>
+    <string name="quick_sheet_coat_label">Brasão de Armas</string>
+    <string name="quick_sheet_titles_label">Títulos</string>
+    <string name="quick_sheet_seats_label">Sedes</string>
+    <string name="quick_sheet_weapons_label">Armas Ancestrais</string>
+    <string name="quick_sheet_none">Nenhum registro</string>
+    <string name="quick_sheet_pledge">Jurar Lealdade</string>
+    <string name="quick_sheet_sworn">Lealdade Jurada</string>
 </resources>
