@@ -1,0 +1,6 @@
+{
+  "name": "Westeros Codex",
+  "description": "Guia interativo Offline-First sobre as Grandes Casas de Westeros, com juramentos de lealdade e anotações do Meistre.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
